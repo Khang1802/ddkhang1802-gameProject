@@ -2,7 +2,7 @@
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
 
-Game *game = nullptr;
+Game *game = nullptr; 
 
 int main(int argc, char* argv[])
 {
