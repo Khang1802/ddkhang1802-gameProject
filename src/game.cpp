@@ -44,9 +44,9 @@ void Game::init(const char* title, int x, int y, int w, int h, bool fullscreen)
        playertex = SDL_CreateTextureFromSurface(renderer, surface);
        SDL_FreeSurface(surface);
        */
-      playertex = IMG_LoadTexture(renderer, "res/newknightimage.png");
-      background = IMG_LoadTexture(renderer, "res/version2background1.jpg");
-
+      playertex = IMG_LoadTexture(renderer, "res/knightxinso.png");
+      background = IMG_LoadTexture(renderer, "res/background1.png");
+     
 }
 
 void Game::handleEvents()
@@ -68,8 +68,8 @@ void Game::update()
 {
     tempx++;
     tempy++;
-    destR.w = 60;
-    destR.h = 60;
+    destR.w = 120;
+    destR.h = 120;
     destR.x = tempx;
     destR.y = tempy;
 }
