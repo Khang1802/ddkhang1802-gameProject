@@ -10,6 +10,8 @@ class GameObject
         SDL_Rect srcRect, destRect;
         SDL_Renderer* renderer;
 
+
     public: 
         GameObject(const char* texturesheet, SDL_Renderer* ren);
+        
 };

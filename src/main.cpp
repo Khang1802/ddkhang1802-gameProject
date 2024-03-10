@@ -2,7 +2,7 @@
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
 
-Game *game = nullptr; 
+Game *game = nullptr;
 
 int main(int argc, char* argv[])
 {
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
    int frameTime;
 
    game = new Game();
-   game->init("Knights'adventure", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, false);
+   game->init("Knights'adventure", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 600, false);    // co the can chinh lai window trong tuong lai
    while (game->running())
    {
          frameStart = SDL_GetTicks();
@@ -22,11 +22,11 @@ int main(int argc, char* argv[])
          game->render();
 
          frameTime = SDL_GetTicks()-frameStart;
-         if (frameDelay > frameTime)
+         if (frameDelay > frameTime)      //Duy tri su muot ma cho game
          {
             SDL_Delay(frameDelay-frameTime);
          }
-         
+
    }
    game->clean();
    return 0;

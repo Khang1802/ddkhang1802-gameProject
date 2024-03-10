@@ -3,8 +3,14 @@
 #include <iostream>
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
-
+/*
 SDL_Texture *playertex;
+SDL_Texture* background;
+SDL_Rect srcR, destR;
+*/
+SDL_Texture* playertex = nullptr;
+SDL_Texture* background = nullptr;
+
 SDL_Rect srcR, destR;
 
 Game::Game()
@@ -15,7 +21,7 @@ Game::~Game(){};
 void Game::init(const char* title, int x, int y, int w, int h, bool fullscreen)
 {
        int flags = 0;
-       if (fullscreen) flags = SDL_WINDOW_FULLSCREEN;
+       if (fullscreen) flags = SDL_WINDOW_FULLSCREEN;   //sdl_window_fullscreen = 1;
        if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
        {
             std::cout << "Init successfull" << std::endl; 
@@ -33,9 +39,14 @@ void Game::init(const char* title, int x, int y, int w, int h, bool fullscreen)
             isRunning = true;
        }
        else isRunning = false;
-       SDL_Surface *surface = IMG_Load("res/knightimage.png");
+       /*
+       SDL_Surface *surface = IMG_Load("res/image1.png");
        playertex = SDL_CreateTextureFromSurface(renderer, surface);
        SDL_FreeSurface(surface);
+       */
+      playertex = IMG_LoadTexture(renderer, "res/newknightimage.png");
+      background = IMG_LoadTexture(renderer, "res/version2background1.jpg");
+
 }
 
 void Game::handleEvents()
@@ -55,20 +66,23 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    cnt++;
-    destR.h = 100;
-    destR.w = 100;
-    destR.x = cnt;
-    std::cout << cnt << std::endl;
+    tempx++;
+    tempy++;
+    destR.w = 60;
+    destR.h = 60;
+    destR.x = tempx;
+    destR.y = tempy;
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
     //put function here;
+    SDL_RenderCopy(renderer, background, NULL, NULL);
     SDL_RenderCopy(renderer, playertex, NULL, &destR);
     SDL_RenderPresent(renderer);
 }
+
 
 void Game::clean()
 {
@@ -77,4 +91,3 @@ void Game::clean()
     SDL_Quit();
     std::cout << "Game cleaned" << std::endl;
 }
-

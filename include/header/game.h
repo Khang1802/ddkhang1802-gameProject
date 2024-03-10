@@ -18,7 +18,8 @@ class Game
         void clean();
         bool running() {return isRunning;}
     private:
-        int cnt = 0;
+        int tempx = 0;
+        int tempy = 0;
         bool isRunning;
         SDL_Window *window;
         SDL_Renderer *renderer;

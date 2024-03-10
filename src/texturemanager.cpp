@@ -1,5 +1,5 @@
 #include <header/texturemanager.h>
-
+/*
 SDL_Texture *texturemanager::LoadTexture(const char* texture, SDL_Renderer* ren)
 {
     SDL_Surface* surface = IMG_Load(texture);
@@ -7,3 +7,4 @@ SDL_Texture *texturemanager::LoadTexture(const char* texture, SDL_Renderer* ren)
     SDL_FreeSurface(surface);
     return tex;
 }
+*/
