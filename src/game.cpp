@@ -1,5 +1,4 @@
 #include <header/game.h>
-#include <header/texturemanager.h>
 #include <iostream>
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
