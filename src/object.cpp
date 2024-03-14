@@ -21,7 +21,7 @@ bool Object::loadTexture(std::string path, SDL_Renderer* screen)
     SDL_Surface* loadsurface = IMG_Load(path.c_str());
     if (loadsurface != NULL)
     {
-        SDL_SetColorKey(loadsurface, SDL_TRUE, SDL_MapRGB(loadsurface->format, COLOR_KEY_R, COLOR_KEY_G, COLOR_KEY_B));  //set ma mau khop voi background
+       // SDL_SetColorKey(loadsurface, SDL_TRUE, SDL_MapRGB(loadsurface->format, COLOR_KEY_R, COLOR_KEY_G, COLOR_KEY_B));  //set ma mau khop voi background
         newtexture = SDL_CreateTextureFromSurface(screen, loadsurface);
         if (newtexture != NULL)
         {

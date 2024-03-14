@@ -6,8 +6,13 @@
 #include <header/sources.h>
 #include <header/object.h>
 #include <header/player.h>
+#include <header/threat.h>
 
 Object background;
+Player p_player;
+
+int x_threat = rand()%1200 + 1;
+Threat t_threat(x_threat);
 
 bool initSDL()
 {
@@ -15,7 +20,7 @@ bool initSDL()
     int frame = SDL_Init(SDL_INIT_VIDEO);
     if (frame < 0) return false;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-    window = SDL_CreateWindow("Knights'adventure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Knight's adventure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (window == NULL) flag = false;
     else
     {
@@ -37,7 +42,7 @@ bool initSDL()
     return flag;
 }
 
-bool loadBackground()
+bool loadBackground()        // co the cai tien 
 {
     bool bgimage = background.loadTexture("res/background1.png", screen);
     if (bgimage == false)
@@ -54,21 +59,32 @@ void close()
     screen = NULL;
     SDL_DestroyWindow(window);
     window = NULL;
+    p_player.clean();
+    t_threat.clean();
     IMG_Quit();
     SDL_Quit();
 }
 
 int main(int argc, char* argv[])
-{
+{   srand(time(NULL));   //sinh threat tai vi tri ngau nhien
     if (initSDL() != true) return -1;           //khoi tao cua so 
     if (loadBackground() != true) return -1;      //goi background
 
-    Player p_player;
-    p_player.loadTexture("res/newsizeknight.png", screen);
+    
+    if (p_player.loadTexture("res/newsizeknight.png", screen) != true)
+    {
+        return -1;
+    }
+
+    p_player.setvalue_x(0);
+
+
+    if (t_threat.loadTexture("res/threat1.png", screen) != true)
+    {
+        return -1;
+    }
+
     bool is_quit = false;
-
-    p_player.setVal(0);
-
     while (!is_quit)
     {
         while (SDL_PollEvent(&event) != 0)
@@ -83,14 +99,13 @@ int main(int argc, char* argv[])
             SDL_RenderClear(screen);        //xoa -> nap -> in anh
             background.applyTexture(screen, NULL, NULL);   //NULL, NULL de in ra toan man hinh
             p_player.renderPlayer(screen, p_player);
+
+            t_threat.creatThreat(screen, t_threat, x_threat);
+
             SDL_Delay(10);
             
         }
         
-        
-        
-
-
         SDL_RenderPresent(screen);
     }
 

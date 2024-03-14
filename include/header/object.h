@@ -8,9 +8,9 @@ class Object
 public:
     Object();
     ~Object();
-    virtual bool loadTexture(std::string path, SDL_Renderer* screen);         //cac ham con co the override 
+    bool loadTexture(std::string path, SDL_Renderer* screen);         //cac ham con co the override 
     void applyTexture(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip = NULL);
-    void setRect(const int &x,const int &y) 
+    void setRect(const int &x,const int &y)      // can xem xet them
     {
         rect.x = x;
         rect.y = y;
