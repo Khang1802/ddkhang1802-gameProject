@@ -34,10 +34,16 @@ bool Object::loadTexture(std::string path, SDL_Renderer* screen)
     return object != NULL;
 }
 
-void Object::renderTexture(SDL_Renderer* des, const SDL_Rect* clip)
+void Object::applyTexture(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip)
 {
-    SDL_Rect renderquad = {rect.x, rect.y, rect.w, rect.h};    //vi tri, thong so cua tam anh
-    SDL_RenderCopy(des, object, clip, &renderquad);
+    SDL_Rect offset;
+    offset.x = x;
+    offset.y = y;
+    offset.w = rect.w;
+    offset.h = rect.h;
+
+    //can chinh sua them;
+    SDL_RenderCopy(renderer, object, clip, &offset);
 }
 
 void Object::clean()

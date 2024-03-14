@@ -5,14 +5,10 @@
 class Player : public Object
 {
 public: 
+    /*
     Player();
     ~Player();
-
-    enum walkType
-    {
-        WALK_RIGHT = 0,
-        WALK_LEFT = 1,
-    };
+    
 
     bool loadImg(std::string path, SDL_Renderer* screen);
 
@@ -21,7 +17,21 @@ public:
     void handleMove(SDL_Event event, SDL_Renderer* screen);
 
     void setclip();    //xu ly animation
+    */ 
+
+   static const int width = 150;
+   static const int height = 137;
+
+    Player();
+
+    void setVal(int x);
+    void handleInputAction(SDL_Event &event);
+    void handleMove();
+    SDL_Rect getRect();
+    void renderPlayer(SDL_Renderer* renderer, Object& player);
+
 private:
+    /*
     double x_val;
     double y_val;
 
@@ -37,4 +47,7 @@ private:
 
     int frame;
     int status;
+    */
+   int x_val;
+   SDL_Rect rect;
 };

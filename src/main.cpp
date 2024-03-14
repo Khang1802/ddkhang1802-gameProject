@@ -15,7 +15,7 @@ bool initSDL()
     int frame = SDL_Init(SDL_INIT_VIDEO);
     if (frame < 0) return false;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-    window = SDL_CreateWindow("Strike", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Knights'adventure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (window == NULL) flag = false;
     else
     {
@@ -60,14 +60,14 @@ void close()
 
 int main(int argc, char* argv[])
 {
-    if (initSDL() != true) return -1;
-    if (loadBackground() != true) return -1;
-    
-    Player p_player;
-    p_player.loadImg("res/turnright.jpg", screen);
-    p_player.setclip();
+    if (initSDL() != true) return -1;           //khoi tao cua so 
+    if (loadBackground() != true) return -1;      //goi background
 
+    Player p_player;
+    p_player.loadTexture("res/newsizeknight.png", screen);
     bool is_quit = false;
+
+    p_player.setVal(0);
 
     while (!is_quit)
     {
@@ -77,14 +77,19 @@ int main(int argc, char* argv[])
             {
                 is_quit = true;
             }
+            p_player.handleInputAction(event);
+            p_player.handleMove();
 
-            p_player.handleMove(event, screen);
+            SDL_RenderClear(screen);        //xoa -> nap -> in anh
+            background.applyTexture(screen, NULL, NULL);   //NULL, NULL de in ra toan man hinh
+            p_player.renderPlayer(screen, p_player);
+            SDL_Delay(10);
+            
         }
-        SDL_SetRenderDrawColor(screen, RENDER_DRAWW_COLOR, RENDER_DRAWW_COLOR, RENDER_DRAWW_COLOR, RENDER_DRAWW_COLOR);
-        SDL_RenderClear(screen);        //xoa -> nap -> in anh
-        background.renderTexture(screen, NULL);
+        
+        
+        
 
-        p_player.showScreen(screen);
 
         SDL_RenderPresent(screen);
     }

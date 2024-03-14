@@ -1,16 +1,22 @@
 
 #include <header/player.h>
 
+/*
 Player::Player()
 {
     frame = 0;
-    x_pos = 0;
-    y_pos = 0;
+    x_pos = 360;
+    y_pos = 120;
     x_val = 0;
     y_val = 0;
     width_frame = 0;
     height_frame = 0;
     status = -1;
+    input_type.left = 0;
+    input_type.right = 0;
+    input_type.jump = 0;
+    input_type.up = 0;
+    input_type.down = 0;
 }
 
 Player::~Player(){}
@@ -75,6 +81,7 @@ void Player::setclip()        //xu ly animation
 
 void Player::showScreen(SDL_Renderer* des)      //2 trang thai quay trai hoac phai 
 {
+    /*
     if (status == WALK_LEFT)
     {
         loadImg("res/turnleft.jpg", des);
@@ -92,6 +99,11 @@ void Player::showScreen(SDL_Renderer* des)      //2 trang thai quay trai hoac ph
     {
         frame = 0;   //dang dung yen;
     }
+    if (frame >= 8) 
+    {
+        frame = 0;
+    }
+
     rect.x = x_pos;   //vi tri hien thi nhan vat
     rect.y = y_pos;
 
@@ -104,6 +116,7 @@ void Player::showScreen(SDL_Renderer* des)      //2 trang thai quay trai hoac ph
 
 void Player::handleMove(SDL_Event event, SDL_Renderer* screen)
 {
+    /*
     if (event.type == SDL_KEYDOWN)
     {
         switch (event.key.keysym.sym)
@@ -112,12 +125,15 @@ void Player::handleMove(SDL_Event event, SDL_Renderer* screen)
             {
                 status = WALK_RIGHT;
                 input_type.right = 1;
+                input_type.left = 0;
+                
             }
                 break;
             case SDLK_LEFT:
             {
                 status = WALK_LEFT;
                 input_type.left = 1;
+                input_type.right = 0;
             }
                 break;
             default :
@@ -130,18 +146,81 @@ void Player::handleMove(SDL_Event event, SDL_Renderer* screen)
         {
             case SDLK_RIGHT:
             {
-                status = WALK_RIGHT;
-                input_type.right = 1;
+
+                input_type.right = 0;
             }
                 break;
             case SDLK_LEFT:
             {
-                status = WALK_LEFT;
-                input_type.left = 1;
+                
+                input_type.left = 0;
             }
-                break;
-            default :
                 break;
         }
     }
+    
+}
+*/
+
+Player::Player()
+{
+    x_val = 0;
+   // rect = {0, 450, width, height};
+    rect.x = 0;
+    rect.y = 450;
+    rect.w = width; 
+    rect.h = height;
+}
+
+SDL_Rect Player::getRect()
+{
+    return rect;
+}
+
+void Player::handleInputAction(SDL_Event &event)
+{
+    if (event.type == SDL_KEYDOWN && event.key.repeat == 0)    //luc nhan phim
+    {
+        switch (event.key.keysym.sym)
+        {
+            case SDLK_RIGHT:
+                x_val += 50;
+                break;
+            case SDLK_LEFT:
+                x_val -= 50;
+                break;
+            default:
+                break;
+        }
+    }
+    else if (event.type == SDL_KEYUP && event.key.repeat == 0)       //luc nha phim thi phai tru di gia tri
+    {
+        switch (event.key.keysym.sym)
+        {
+            case SDLK_RIGHT:
+                x_val -= 50;
+                break;
+            case SDLK_LEFT:
+                x_val += 50;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void Player::renderPlayer(SDL_Renderer* renderer, Object &player)
+{
+    player.applyTexture(renderer, rect.x, rect.y);
+}
+
+void Player::handleMove()
+{
+    rect.x += x_val;
+    //can chinh sua
+}
+
+void Player::setVal(int x)
+{
+    x_val = x;
 }

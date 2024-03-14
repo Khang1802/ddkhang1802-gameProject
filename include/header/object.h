@@ -9,7 +9,7 @@ public:
     Object();
     ~Object();
     virtual bool loadTexture(std::string path, SDL_Renderer* screen);         //cac ham con co the override 
-    void renderTexture(SDL_Renderer* renderer, const SDL_Rect* clip = NULL);
+    void applyTexture(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip = NULL);
     void setRect(const int &x,const int &y) 
     {
         rect.x = x;
