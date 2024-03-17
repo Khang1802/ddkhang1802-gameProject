@@ -2,6 +2,8 @@
 
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
+#include <stdlib.h>
+#include <iostream>   //de dung std::string
 
 class Object
 {
@@ -18,7 +20,7 @@ public:
     SDL_Rect getRect() {return rect;}
     SDL_Texture* getObject() {return object;}
     void clean();
-protected: //giup ham ke thua thuoc tinh
+private: 
     SDL_Rect rect;     
     SDL_Texture* object;
 };

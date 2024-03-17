@@ -12,6 +12,11 @@ Player::Player()
     rect.h = height;
 }
 
+Player::~Player()
+{
+    clean();
+}
+
 SDL_Rect Player::getRect()  
 {
     return rect;

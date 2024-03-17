@@ -8,10 +8,10 @@ Threat::Threat(int x)
     rect.h = height_threat;
 }
 
-void Threat::creatThreat(SDL_Renderer* renderer, Threat &threat, int x_val)
+void Threat::createThreat(SDL_Renderer* renderer, Threat &threat, int xchange)
 {
     threat.applyTexture(renderer, rect.x, rect.y);
-    rect.y += x_val;
+    rect.y += xchange;
 }
 
 SDL_Rect Threat::getRect()

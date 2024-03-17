@@ -42,6 +42,11 @@ void Object::applyTexture(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip)
     offset.w = rect.w;
     offset.h = rect.h;
 
+    if (clip != NULL)
+    {
+        offset.w = clip->w;
+        offset.h = clip->h;
+    }
     //can chinh sua them;
     SDL_RenderCopy(renderer, object, clip, &offset);
 }

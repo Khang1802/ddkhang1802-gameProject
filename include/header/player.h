@@ -10,6 +10,7 @@ public:
    static const int height = 137;
 
     Player();
+    ~Player();
 
     void setvalue_x(int x);
     void handleInputAction(SDL_Event &event);
@@ -19,6 +20,6 @@ public:
 
 private:
   
-   int x_val;
+   int x_val;          //vi tri ban dau
    SDL_Rect rect;
 };

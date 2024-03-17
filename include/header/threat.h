@@ -11,7 +11,7 @@ class Threat : public Object
            static const int width_threat = 120;
            static const int height_threat = 120;
            Threat(int x);
-           void creatThreat(SDL_Renderer* renderer, Threat& threat, int x_val); 
+           void createThreat(SDL_Renderer* renderer, Threat& threat, int xchange); 
            
            SDL_Rect getRect();
     private:
