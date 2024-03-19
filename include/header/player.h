@@ -6,8 +6,8 @@ class Player : public Object
 {
 public: 
    
-   static const int width = 150;            //se dung lai de check va cham voi vat the
-   static const int height = 137;
+   static const int width = 104;            //se dung lai de check va cham voi vat the
+   static const int height = 96;
 
     Player();
     ~Player();
@@ -15,7 +15,7 @@ public:
     void setvalue_x(int x);
     void handleInputAction(SDL_Event &event);
     void handleMove();
-    SDL_Rect getRect();
+    SDL_Rect getRect();           //dua get rct vao object
     void renderPlayer(SDL_Renderer* renderer, Object& player);
 
 private:

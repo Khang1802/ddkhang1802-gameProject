@@ -3,11 +3,13 @@
 #include <bits/stdc++.h>
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
+#include <sdl/SDL_mixer.h>
 
 #include <header/sources.h>
 #include <header/object.h>
 #include <header/player.h>
 #include <header/threat.h>
+#include <header/treasure.h>
 
 Object background;
 Player p_player;
@@ -16,6 +18,9 @@ int x_threat = rand()%1200 + 1;
 Threat t_threat(x_threat);
 
 std::vector<Threat> threat_Collection;
+
+int treasure_pos = rand()%1200 + 1;
+Treasure treasure(treasure_pos);
 
 bool initSDL()
 {
@@ -83,13 +88,18 @@ int main(int argc, char* argv[])
 {   
     srand(time(0));   //sinh threat tai vi tri ngau nhien
     
-    if (initSDL() != true) std::cout << "Initilize failed" << std::endl;           //khoi tao cua so 
-    if (loadBackground() != true) std::cout << "Background failed" << std::endl;      //goi background
-
-
-    if (p_player.loadTexture("res/newsizeknight.png", screen) != true)
+    if (initSDL() != true) 
     {
-        std::cout << "Load player failed!" << std::endl;
+        std::cout << "Initilize failed" << SDL_GetError() << std::endl;           //khoi tao cua so 
+    }    
+    if (loadBackground() != true) 
+    {
+        std::cout << "Background failed" << IMG_GetError() << std::endl;      //goi background
+    }
+
+    if (p_player.loadTexture("res/newsizeknight.pn", screen) != true)
+    {
+        std::cout << "Load player failed!" << IMG_GetError() << std::endl;
     }
 
     p_player.setvalue_x(0);
@@ -97,13 +107,19 @@ int main(int argc, char* argv[])
     
     if (t_threat.loadTexture("res/threat2.png", screen) != true)
     {
-        std::cout << "Load threat failed!" << std::endl;
+        std::cout << "Load threat failed!" << IMG_GetError() << std::endl;
+    }
+
+    if (treasure.loadTexture("res/treasure.png", screen) != true)
+    {
+        std::cout << "load treasure failed !" << IMG_GetError() << std::endl;
     }
 
     int time_count = 0;
 
     bool is_quit = false;
 
+    int count_treasure = 0;
     
     while (!is_quit)
     {
@@ -118,22 +134,22 @@ int main(int argc, char* argv[])
             p_player.handleInputAction(event);
             p_player.handleMove();
         }
-            if (time_count % 10 == 0) 
+            if (time_count % 50 == 0)
+            {
+                treasure.createTreasure(screen, treasure);
+            }
+            if (time_count % 50 == 0) 
             {
                 xchange += 0.025;     //tang toc do cho threat
             }
-            if (time_count % 50 == 0)
+            if (time_count % 100 == 0)     //lam moi threat (can nhac ve do kho cho game)
             {
                 int num_threat = rand()%1200+1;
                 threat_Collection.push_back(num_threat);
             }
-            for (int i = 0; i < threat_Collection.size(); i++)
-            {
-                threat_Collection[i].createThreat(screen, t_threat, xchange);
-            }
+           
             SDL_RenderClear(screen);        //xoa -> nap -> in anh
             background.applyTexture(screen, 0, 0);   //NULL, NULL de in ra toan man hinh (neu gan NULL se co warning -> fixed -> 0, 0)
-            p_player.renderPlayer(screen, p_player);
             
             //t_threat.createThreat(screen, t_threat, xchange);
 
@@ -142,15 +158,34 @@ int main(int argc, char* argv[])
                 threat_Collection[i].createThreat(screen, t_threat, xchange);
             }
             
+            p_player.renderPlayer(screen, p_player);
+            
+            treasure.createTreasure(screen, treasure);
+
             SDL_Delay(10);
 
-            time_count += 1;
 
             SDL_RenderPresent(screen);
             
+            time_count += 1;
+
+            // check va cham
+            for (int i = 0; i < threat_Collection.size(); i++)
+            {
+                if (checkCollision(threat_Collection[i].getRect(), p_player.getRect()))
+                {
+                    is_quit = true;
+                }
+            }
+            //se can them bien de luu tru treasure;
+            if (checkCollision(p_player.getRect(), treasure.getRect()))
+            {
+                treasure.clean();
+                count_treasure++;
+            }
         
     }
-
+    std::cout << count_treasure;
 
     close();
    return 0;

@@ -22,13 +22,14 @@ bool Object::loadTexture(std::string path, SDL_Renderer* screen)
     if (loadsurface != NULL)
     {
        // SDL_SetColorKey(loadsurface, SDL_TRUE, SDL_MapRGB(loadsurface->format, COLOR_KEY_R, COLOR_KEY_G, COLOR_KEY_B));  //set ma mau khop voi background
+       //do da de anh xoa phong nen chua dung, neu thay loi se refact sau
         newtexture = SDL_CreateTextureFromSurface(screen, loadsurface);
         if (newtexture != NULL)
         {
             rect.w = loadsurface->w;     //lay kich thuoc tam anh
             rect.h = loadsurface->h;
         }
-        SDL_FreeSurface(loadsurface);         //khong can nua
+        SDL_FreeSurface(loadsurface);         //khong can toi surface nua
     }
     object = newtexture;
     return object != NULL;

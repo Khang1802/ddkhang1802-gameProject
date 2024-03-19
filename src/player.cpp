@@ -5,9 +5,9 @@
 Player::Player()
 {
     x_val = 0;
-   // rect = {0, 450, width, height};
+
     rect.x = 0;
-    rect.y = 450;
+    rect.y = 530;     //toa do de nhan vat tiep dat
     rect.w = width; 
     rect.h = height;
 }
@@ -16,6 +16,7 @@ Player::~Player()
 {
     clean();
 }
+
 
 SDL_Rect Player::getRect()  
 {

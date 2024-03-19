@@ -8,10 +8,10 @@
 class Threat : public Object
 {
     public:
-           static const int width_threat = 120;
+           static const int width_threat = 35;
            static const int height_threat = 120;
            Threat(int x);
-           void createThreat(SDL_Renderer* renderer, Threat& threat, int xchange); 
+           void createThreat(SDL_Renderer* renderer, Threat& threat, int threatchange); 
            
            SDL_Rect getRect();
     private:
