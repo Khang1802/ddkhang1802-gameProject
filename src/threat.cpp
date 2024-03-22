@@ -1,4 +1,5 @@
 #include <header/threat.h>
+#include <header/sources.h>
 
 Threat::Threat(int x)
 {

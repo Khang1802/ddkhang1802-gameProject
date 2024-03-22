@@ -30,10 +30,12 @@ void Player::handleInputAction(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
             case SDLK_RIGHT:
-                x_val += 50;
+                x_val += 40;
+                
                 break;
             case SDLK_LEFT:
-                x_val -= 50;
+                x_val -= 40;
+               
                 break;
             default:
                 break;
@@ -44,10 +46,10 @@ void Player::handleInputAction(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
             case SDLK_RIGHT:
-                x_val -= 50;
+                x_val -= 40;
                 break;
             case SDLK_LEFT:
-                x_val += 50;
+                x_val += 40;
                 break;
             default:
                 break;

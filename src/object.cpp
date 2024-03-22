@@ -17,6 +17,7 @@ Object::~Object()
 
 bool Object::loadTexture(std::string path, SDL_Renderer* screen)
 {
+    clean();
     SDL_Texture* newtexture = NULL;
     SDL_Surface* loadsurface = IMG_Load(path.c_str());
     if (loadsurface != NULL)
@@ -63,4 +64,32 @@ void Object::clean()
     }
 }
 
+bool Object::loadTtf(std::string path, SDL_Renderer* screen, TTF_Font* font, SDL_Color color)
+{
+    clean();
 
+    SDL_Surface* loadFont = TTF_RenderText_Solid(font, path.c_str(), color);
+    if (loadFont == NULL)
+    {
+        std::cout << "Unable to render text !" << TTF_GetError() << std::endl;
+    }
+    else 
+    {
+        object = SDL_CreateTextureFromSurface(screen, loadFont);
+        if (object == NULL)
+        {
+            std::cout << "Unable to create texture from rendered text !" << SDL_GetError() << std::endl;
+        }
+        else 
+        {
+            rect.w = loadFont->w;
+            rect.h = loadFont->h;
+        }
+
+        //bo old surface di
+        SDL_FreeSurface(loadFont);
+
+    }
+
+    return object != NULL;
+}

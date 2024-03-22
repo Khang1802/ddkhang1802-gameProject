@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.h"
+
 #include <sdl/SDL.h>
 #include <sdl/SDL_image.h>
 
@@ -9,10 +10,12 @@ class Treasure : public Object
     public:
         static const int width = 40;
         static const int height = 46;
-        Treasure(int x);
+        Treasure();
         void createTreasure(SDL_Renderer* renderer, Treasure &treasure);
 
+        void setInitialPos(int &x);
 
+        void setPos();
 
         SDL_Rect getRect();   
     private:

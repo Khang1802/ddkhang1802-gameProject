@@ -1,6 +1,6 @@
 #include <header/sources.h>
 
-bool checkCollision(SDL_Rect a, SDL_Rect b)
+bool checkCollision(SDL_Rect a, SDL_Rect b)  //check va cham kha la chuan nhung se co chut lech do nhan vat, threat khong phai la hinh chu nhat hoan toan
 {
 
     if (a.x + a.w <= b.x) return false;    //check phai a, trai b
