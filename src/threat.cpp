@@ -9,10 +9,13 @@ Threat::Threat(int x)
     rect.h = height_threat;
 }
 
-void Threat::createThreat(SDL_Renderer* renderer, Threat &threat, int threatchange)
+void Threat::createThreat(SDL_Renderer* screen, Threat &threat, int threatchange, bool stop_threat)
 {
-    threat.applyTexture(renderer, rect.x, rect.y);
-    rect.y += threatchange;
+    threat.applyTexture(screen, rect.x, rect.y);
+    if (stop_threat == false)
+    {
+        rect.y += threatchange;
+    }
 }
 
 

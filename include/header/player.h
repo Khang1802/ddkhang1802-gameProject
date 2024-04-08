@@ -17,7 +17,7 @@ public:
     void handleInputAction(SDL_Event &event);
     void handleMove();
     SDL_Rect getRect();           //dua get rct vao object
-    void renderPlayer(SDL_Renderer* renderer, Object& player);
+    void renderPlayer(SDL_Renderer* screen, Player& player);
 
 private:
   

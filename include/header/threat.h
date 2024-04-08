@@ -12,7 +12,7 @@ class Threat : public Object
            static const int width_threat = 50;
            static const int height_threat = 53;
            Threat(int x);
-           void createThreat(SDL_Renderer* renderer, Threat& threat, int threatchange); 
+           void createThreat(SDL_Renderer* screen, Threat& threat, int threatchange, bool stop_threat); 
            SDL_Rect getRect();
     private:
            SDL_Rect rect;

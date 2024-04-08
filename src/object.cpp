@@ -17,7 +17,7 @@ Object::~Object()
 
 bool Object::loadTexture(std::string path, SDL_Renderer* screen)
 {
-    clean();
+    //clean();
     SDL_Texture* newtexture = NULL;
     SDL_Surface* loadsurface = IMG_Load(path.c_str());
     if (loadsurface != NULL)
@@ -36,7 +36,7 @@ bool Object::loadTexture(std::string path, SDL_Renderer* screen)
     return object != NULL;
 }
 
-void Object::applyTexture(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip)
+void Object::applyTexture(SDL_Renderer* screen, int x, int y, SDL_Rect* clip)
 {
     SDL_Rect offset;
     offset.x = x;
@@ -50,7 +50,7 @@ void Object::applyTexture(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip)
         offset.h = clip->h;
     }
     //can chinh sua them;
-    SDL_RenderCopy(renderer, object, clip, &offset);
+    SDL_RenderCopy(screen, object, clip, &offset);
 }
 
 void Object::clean()
@@ -66,7 +66,7 @@ void Object::clean()
 
 bool Object::loadTtf(std::string path, SDL_Renderer* screen, TTF_Font* font, SDL_Color color)
 {
-    clean();
+    //clean();
 
     SDL_Surface* loadFont = TTF_RenderText_Solid(font, path.c_str(), color);
     if (loadFont == NULL)

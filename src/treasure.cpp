@@ -9,9 +9,9 @@ Treasure::Treasure()
     rect.h = height;
 }
 
-void Treasure::createTreasure(SDL_Renderer* renderer, Treasure &treasure)
+void Treasure::createTreasure(SDL_Renderer* screen, Treasure &treasure)
 {
-    treasure.applyTexture(renderer, rect.x, rect.y);
+    treasure.applyTexture(screen, rect.x, rect.y);
     if (rect.y <= 560)
     {
         rect.y += 2;        //roi tu do hehe
@@ -30,7 +30,7 @@ void Treasure::setInitialPos(int &x)
 
 void Treasure::setPos()
 {
-    int x = rand() % 1225 + 1;
+    int x = rand() % 1230 + 1;
     rect.x = x;
     if (rect.x + width > SCREEN_WIDTH)
     {

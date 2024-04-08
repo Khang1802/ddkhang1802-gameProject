@@ -6,7 +6,7 @@ Player::Player()
 {
     x_val = 0;
 
-    rect.x = 0;
+    rect.x = 1225/2;
     rect.y = 530;     //toa do de nhan vat tiep dat
     rect.w = width; 
     rect.h = height;
@@ -30,11 +30,11 @@ void Player::handleInputAction(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
             case SDLK_RIGHT:
-                x_val += 40;
+                x_val += 32;
                 
                 break;
             case SDLK_LEFT:
-                x_val -= 40;
+                x_val -= 32;
                
                 break;
             default:
@@ -46,10 +46,10 @@ void Player::handleInputAction(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
             case SDLK_RIGHT:
-                x_val -= 40;
+                x_val -= 32;
                 break;
             case SDLK_LEFT:
-                x_val += 40;
+                x_val += 32;
                 break;
             default:
                 break;
@@ -57,9 +57,9 @@ void Player::handleInputAction(SDL_Event &event)
     }
 }
 
-void Player::renderPlayer(SDL_Renderer* renderer, Object &player)
+void Player::renderPlayer(SDL_Renderer* screen, Player &player)
 {
-    player.applyTexture(renderer, rect.x, rect.y);
+    player.applyTexture(screen, rect.x, rect.y);
 }
 
 void Player::handleMove()

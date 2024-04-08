@@ -11,7 +11,7 @@ class Treasure : public Object
         static const int width = 40;
         static const int height = 46;
         Treasure();
-        void createTreasure(SDL_Renderer* renderer, Treasure &treasure);
+        void createTreasure(SDL_Renderer* screen, Treasure &treasure);
 
         void setInitialPos(int &x);
 
