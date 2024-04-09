@@ -20,11 +20,6 @@ public:
     bool loadTtf(std::string path, SDL_Renderer* screen, TTF_Font* font, SDL_Color color);
 
     void applyTexture(SDL_Renderer* screen, int x, int y, SDL_Rect* clip = NULL);
-    void setRect(const int &x,const int &y)      // can xem xet them
-    {
-        rect.x = x;
-        rect.y = y;
-    }
     
     SDL_Texture* getObject() {return object;}
     void clean();

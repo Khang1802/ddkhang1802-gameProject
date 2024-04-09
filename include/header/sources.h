@@ -26,8 +26,11 @@ const int RENDER_DRAWW_COLOR = 255;   // 255, 255, 255 == white
 static Mix_Chunk* hittreasure = NULL;
 static Mix_Chunk* clocksound = NULL;
 static Mix_Chunk* hitbom = NULL;
+static Mix_Chunk* clickchuot = NULL;
+
 
 static Mix_Music* musicgame = NULL;
+static Mix_Music* menu_music = NULL;
 
 
 bool checkCollision(SDL_Rect a, SDL_Rect b);

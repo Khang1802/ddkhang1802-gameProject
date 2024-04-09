@@ -14,6 +14,7 @@
 #include <header/treasure.h>
 #include <header/life.h>
 #include <header/clocktime.h>
+#include <header/explosion.h>
 
 Object background;
 Player p_player;
@@ -38,6 +39,9 @@ Clocktime clocktime;
 
 //menu
 Object menu;
+
+//explosion
+Explosion explosion;
 
 bool initSDL()
 {
@@ -114,6 +118,9 @@ void close()
     window = NULL;
     p_player.clean();
     t_threat.clean();
+    clocktime.clean();
+    treasure.clean();
+    life.clean();
 
     for (int i = 0; i < threat_Collection.size(); i++)
     {
@@ -121,10 +128,26 @@ void close()
     }
 
     TTF_CloseFont(font);
-    
+
+    Mix_FreeMusic(menu_music);
+    Mix_FreeMusic(musicgame);
+
+    Mix_FreeChunk(clickchuot);
+    Mix_FreeChunk(hitbom);
+    Mix_FreeChunk(hittreasure);
+    Mix_FreeChunk(clocksound);
+
+    menu_music = NULL;
+    musicgame = NULL;
+    clickchuot = NULL;
+    hitbom = NULL;
+    hittreasure = NULL;
+    clocksound = NULL;
+
     TTF_Quit();  //free font
     IMG_Quit();
     SDL_Quit();
+    Mix_Quit();
 }
 
 int showMenu(Object& anhmenu)
@@ -138,7 +161,14 @@ int showMenu(Object& anhmenu)
     SDL_Event event_menu;
     while (true)
     {
+        
+        if (Mix_PlayingMusic() == 0)
+        {
+            Mix_PlayMusic(menu_music, -1);
+        }
+        
         anhmenu.applyTexture(screen, 0, 0);
+
         while (SDL_PollEvent(&event_menu))
         {
             switch(event_menu.type)
@@ -148,10 +178,12 @@ int showMenu(Object& anhmenu)
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 {
+                    Mix_PlayChannel(-1, clickchuot, 0);
                     x = event_menu.motion.x;
                     y = event_menu.motion.y;
-                    if (x >=745 && x <= 745+343 && y >= 330 && y <= 330+47)
+                    if (x >= menu_pos.x && x <= menu_pos.x+menu_pos.w && y >= menu_pos.y && y <= menu_pos.y+menu_pos.h)
                     {
+                        Mix_HaltMusic();
                         return 0;
                     }
                     break;
@@ -222,10 +254,17 @@ int main(int argc, char* argv[])
     font = TTF_OpenFont("res/DungeonFont.ttf", 45);
     
     //------------------------------------------------------
+    //load music
     musicgame = Mix_LoadMUS("res/MysticalForest1.wav");
     if (musicgame == NULL)
     {
         std::cout << "musicgame failed !" << Mix_GetError() << std::endl;
+    }
+    menu_music = Mix_LoadMUS("res/cybercity.wav");
+    if (menu_music == NULL)
+    {
+        std::cout << "musicmenu failed !" << Mix_GetError() << std::endl;
+
     }
     hittreasure = Mix_LoadWAV("res/hitcoin.wav");
     if (hittreasure == NULL)
@@ -242,6 +281,18 @@ int main(int argc, char* argv[])
     {
         std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
     }
+    clickchuot = Mix_LoadWAV("res/clickchuot.wav");
+    if (clickchuot == NULL)
+    {
+        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
+    }
+    //-----------------------------------------------------
+    //load vu no
+    if (explosion.loadTexture("res/explimage.png", screen) != true)
+    {
+        std::cout << "load explosion failed !" << IMG_GetError() << std::endl;
+    }
+    explosion.setclip();
     //-----------------------------------------------------
     int time_count = 0;  //phu trach ve time san sinh ra threat 
 
@@ -266,11 +317,9 @@ int main(int argc, char* argv[])
    int tgngungdong = 0;
 
    int menugame = showMenu(menu);
-   if (menugame == 1)
-   {
-      is_quit = true;
-   }
-    is_quit = false;
+   
+
+
     while (!is_quit)
     {
         if (Mix_PlayingMusic() == 0)
@@ -376,7 +425,6 @@ int main(int argc, char* argv[])
 
             SDL_Delay(10);
 
-
             
             time_count += 1;         //tinh thoi gian
 
@@ -395,6 +443,17 @@ int main(int argc, char* argv[])
                     //SDL_RenderClear(screen);     can nhac them
                     life_count++;
                     life.decreaseLife();
+                    for (int ex = 0; ex < 5; ex++)
+                    {
+                        int expos_x = p_player.getRect().x + (p_player.getRect().w)/2 - 95;
+                        int expos_y = p_player.getRect().y + (p_player.getRect().h)/2 - 80;
+
+                        explosion.setframe(ex);
+                        explosion.setRect(expos_x, expos_y);
+                        explosion.showexplosion(screen, explosion);
+                        SDL_Delay(100);
+                        SDL_RenderPresent(screen);
+                    }
                     Mix_PlayChannel(-1, hitbom, 0);
 
                 }
