@@ -22,7 +22,6 @@ class Clocktime : public Object
 
         SDL_Rect getRect(){ return rect;}
 
-        int gettoadoy(){return rect.y;}
     private:
         SDL_Rect rect;
 };

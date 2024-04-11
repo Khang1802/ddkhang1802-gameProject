@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-    x_val = 0;
+    x_val = 0; //do dich chuyen cua nhan vat
 
     rect.x = 1225/2;
     rect.y = 530;     //toa do de nhan vat tiep dat
@@ -37,6 +37,7 @@ void Player::handleInputAction(SDL_Event &event)
                 x_val -= 32;
                
                 break;
+
             default:
                 break;
         }

@@ -40,6 +40,9 @@ Clocktime clocktime;
 //menu
 Object menu;
 
+//endgame
+Object muclucgame;
+
 //explosion
 Explosion explosion;
 
@@ -99,8 +102,7 @@ bool initSDL()
 
 bool loadBackground()        // co the cai tien 
 {
-    bool bgimage = background.loadTexture("res/background.png", screen);
-    if (bgimage == false)
+    if (!background.loadTexture("res/background.png", screen))
     {
         return false;
     }
@@ -111,16 +113,17 @@ bool loadBackground()        // co the cai tien
 
 void close()
 {   //nhung doi tuong sinh ra tu object se free bang ham clean()
-    background.clean();
     SDL_DestroyRenderer(screen);
     screen = NULL;
     SDL_DestroyWindow(window);
     window = NULL;
+    background.clean();
     p_player.clean();
     t_threat.clean();
     clocktime.clean();
     treasure.clean();
     life.clean();
+    explosion.clean();
 
     for (int i = 0; i < threat_Collection.size(); i++)
     {
@@ -146,8 +149,8 @@ void close()
 
     TTF_Quit();  //free font
     IMG_Quit();
-    SDL_Quit();
     Mix_Quit();
+    SDL_Quit();
 }
 
 int showMenu(Object& anhmenu)
@@ -198,6 +201,56 @@ int showMenu(Object& anhmenu)
     return 1;
 }
 
+int endMenu(Object& anhmucluc)
+{
+    if (!anhmucluc.loadTexture("res/mucluc.png", screen))
+    {
+        std::cout << "muc luc load failed!" << std::endl;
+    }
+    SDL_Rect mucluc_pos[2];
+    mucluc_pos[0] = {SCREEN_WIDTH-773,SCREEN_HEIGHT-541,338,84}; //restart
+    mucluc_pos[1] = {SCREEN_WIDTH-720, SCREEN_HEIGHT-324,243,81}; //exit
+    int x, y;
+    SDL_Event event_mucluc;
+    while (true)
+    {
+        if (Mix_PlayingMusic() == 0)
+        {
+            Mix_PlayMusic(menu_music, -1);
+        }
+        anhmucluc.applyTexture(screen, 0, 0);
+        while (SDL_PollEvent(&event_mucluc))
+        {
+            switch(event_mucluc.type)
+            {
+                case SDL_QUIT:
+                    close();
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                {
+                    Mix_PlayChannel(-1, clickchuot, 0);
+                    x = event_mucluc.motion.x;
+                    y = event_mucluc.motion.y;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (x >= mucluc_pos[i].x && x <= mucluc_pos[i].x+mucluc_pos[i].w && y >= mucluc_pos[i].y && y <= mucluc_pos[i].y + mucluc_pos[i].h)
+                        {
+                            Mix_HaltMusic();
+                            return i;
+                        }
+                    }
+                    break;
+                }
+                default:
+                    break;
+
+            }
+        }
+        SDL_RenderPresent(screen);
+    }
+    return 1;
+}
+
 int main(int argc, char* argv[])
 {   
     srand(time(0));   //sinh threat tai vi tri ngau nhien
@@ -215,7 +268,6 @@ int main(int argc, char* argv[])
     }
     //-----------------------------------------------------
 
-    life.initLife(screen, life);
 
     //------------------------------------------------------
 
@@ -223,8 +275,6 @@ int main(int argc, char* argv[])
     {
         std::cout << "Load player failed!" << IMG_GetError() << std::endl;
     }
-
-    p_player.setvalue_x(0);
 
     //------------------------------------------------------
 
@@ -249,9 +299,7 @@ int main(int argc, char* argv[])
     }
 
     //------------------------------------------------------
-    //load font
-    
-    font = TTF_OpenFont("res/DungeonFont.ttf", 45);
+
     
     //------------------------------------------------------
     //load music
@@ -294,7 +342,16 @@ int main(int argc, char* argv[])
     }
     explosion.setclip();
     //-----------------------------------------------------
+    int menugame = showMenu(menu); //show menu 1 lan duy nhat
+
+while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de restart game
+{    
+
+    p_player.setvalue_x(0);
+
     int time_count = 0;  //phu trach ve time san sinh ra threat 
+
+    xchange = 1; //do thay doi ve toc do cua threat
 
     bool is_quit = false;
 
@@ -307,7 +364,10 @@ int main(int argc, char* argv[])
     clocktime.setClockPos(clock_xval);
 
    int life_count = 0;
-
+    //load font
+    
+    font = TTF_OpenFont("res/DungeonFont.ttf", 45);
+    life.initLife(screen, life);
     //new function
    bool stop_threat = false;
    //bool clock_exist = false;
@@ -315,10 +375,12 @@ int main(int argc, char* argv[])
    bool clock_exist = false;
 
    int tgngungdong = 0;
-
-   int menugame = showMenu(menu);
    
+   int index_threat = 90;
 
+   bool gamequit = true;
+
+   //int endgame = 0;
 
     while (!is_quit)
     {
@@ -337,9 +399,6 @@ int main(int argc, char* argv[])
             p_player.handleMove();
         }
 
-            //get time
-            Uint32 time_val = SDL_GetTicks()/1000;
-
             if (font == NULL)
              {
                std::cout << "load font failed" << TTF_GetError() << std::endl;
@@ -352,21 +411,22 @@ int main(int argc, char* argv[])
                 }
                 //Lay time_count khong kha thi vi tinh theo ms cua chuong trinh
                 
-                if (!Time.loadTtf("Time : " + std::to_string(time_val), screen, font, color_white))
+                if (!Time.loadTtf("Time : " + std::to_string(time_count/60), screen, font, color_white))
                 {
                     std::cout << "load time failed " << std::endl;
                 }
                 
             }
 
-            
 
             if (count_treasure % 30 == 0 && count_treasure > 0) 
             {
                 xchange += 0.005;     //tang toc do cho threat
             }
 
-            if (time_count % 100 == 0)     //lam moi threat (can nhac ve do kho cho game)
+            
+
+            if (time_count % index_threat == 0)     //lam moi threat (can nhac ve do kho cho game)
             {
                 if (stop_threat == false)
                 {
@@ -374,7 +434,7 @@ int main(int argc, char* argv[])
                 
                      while (num_threat >= SCREEN_WIDTH - 50)  //khong de threat tran ra man hinh
                      {
-                         num_threat = rand()%1230+1;
+                         num_threat = rand()%1230 + 1;
                      }
                 
                      threat_Collection.push_back(num_threat);
@@ -440,13 +500,14 @@ int main(int argc, char* argv[])
                     }
                     threat_Collection.clear();   //reset cac threat;
                     treasure.setPos();
-                    //SDL_RenderClear(screen);     can nhac them
+                    clocktime.setNewPos();
                     life_count++;
                     life.decreaseLife();
+                    Mix_PlayChannel(-1, hitbom, 0);
                     for (int ex = 0; ex < 5; ex++)
                     {
-                        int expos_x = p_player.getRect().x + (p_player.getRect().w)/2 - 95;
-                        int expos_y = p_player.getRect().y + (p_player.getRect().h)/2 - 80;
+                        int expos_x = p_player.getRect().x + (p_player.getRect().w)/2 - 95; //dua vu no ve sat voi player
+                        int expos_y = p_player.getRect().y + (p_player.getRect().h)/2 - 95;
 
                         explosion.setframe(ex);
                         explosion.setRect(expos_x, expos_y);
@@ -454,7 +515,7 @@ int main(int argc, char* argv[])
                         SDL_Delay(100);
                         SDL_RenderPresent(screen);
                     }
-                    Mix_PlayChannel(-1, hitbom, 0);
+                    
 
                 }
             }
@@ -481,21 +542,46 @@ int main(int argc, char* argv[])
                 clocktime.setNewPos();
                 clock_exist = false;
             }
-            std::cout<<clocktime.gettoadoy() << std::endl;
-            if (clocktime.gettoadoy() >= 718)
+            
+            if (clocktime.getRect().y >= 718)
             {
                 clocktime.setNewPos();
+                
                 clock_exist = false;
+                
             }
             
-
             SDL_RenderPresent(screen);
-        
+            
+        }
+            is_quit = false;
+            int endgame = endMenu(muclucgame);
+            while (!is_quit)
+            {
+                while (SDL_PollEvent(&event))
+                {
+                    if (event.type == SDL_QUIT || endgame == 0)
+                    {
+                        is_quit = true;
+                        std::cout << "Da thoat hoac da restart thanh cong" << std::endl;
+                        break;
+                    } 
+                    if (endgame == 1) //exit da ok
+                    {
+                        std::cout << "Da exit thanh cong" << std::endl;
+                        close();
+                    
+                    }
+                SDL_RenderPresent(screen);
+                
+                }
+
+                //SDL_RenderPresent(screen);
+            }
+
     }
-
-
     close();
-   return 0;
+    return 0;
 }
 
 
