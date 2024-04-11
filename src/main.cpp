@@ -368,10 +368,9 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
     
     font = TTF_OpenFont("res/DungeonFont.ttf", 45);
     life.initLife(screen, life);
-    //new function
-   bool stop_threat = false;
-   //bool clock_exist = false;
 
+   bool stop_threat = false;
+   
    bool clock_exist = false;
 
    int tgngungdong = 0;
@@ -379,6 +378,8 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
    int index_threat = 90;
 
    bool gamequit = true;
+
+   int temp_treasure = 0;
 
    //int endgame = 0;
 
@@ -456,6 +457,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 treasure.setPos();
                 Mix_PlayChannel(-1, hittreasure, 0);
                 count_treasure += 5;
+                temp_treasure += 5;
             }
             
             //render threat
@@ -472,17 +474,18 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             //render treasure
             treasure.createTreasure(screen, treasure);
             //clocktime
-            if (count_treasure % 35 == 0 && count_treasure > 0 && clock_exist == false)
+            if (temp_treasure == 35 && clock_exist == false)
             {
                 clock_exist = true;
+                temp_treasure = 0;
+                
             }
-
+            
             if (clock_exist)
             {
-                
                 clocktime.createClock(screen, clocktime);
             }
-
+            
             SDL_Delay(10);
 
             
@@ -576,7 +579,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 
                 }
 
-                //SDL_RenderPresent(screen);
+               
             }
 
     }
