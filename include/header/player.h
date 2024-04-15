@@ -3,12 +3,13 @@
 #include "sources.h"
 #include "object.h"
 
+
 class Player : public Object
 {
 public: 
    
-   static const int width = 104;            //se dung lai de check va cham voi vat the
-   static const int height = 96;
+   static const int width = 98;            //se dung lai de check va cham voi vat the
+   static const int height = 91;
 
     Player();
     ~Player();

@@ -49,7 +49,6 @@ void Object::applyTexture(SDL_Renderer* screen, int x, int y, SDL_Rect* clip)
         offset.w = clip->w;
         offset.h = clip->h;
     }
-    //can chinh sua them;
     SDL_RenderCopy(screen, object, clip, &offset);
 }
 

@@ -34,7 +34,7 @@ void Treasure::setPos()
     rect.x = x;
     if (rect.x + width > SCREEN_WIDTH)
     {
-        rect.x -= 40; //dich lai treasure neu no bi tran ra man hinh(treasure.width = 40)
+        rect.x -= width; //dich lai treasure neu no bi tran ra man hinh(treasure.width = 40)
     }
     rect.y = 0;
 

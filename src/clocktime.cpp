@@ -20,7 +20,7 @@ void Clocktime::setClockPos(int &x)
     rect.x = x;
     if (rect.x + width > SCREEN_WIDTH)
     {
-        rect.x -= 50;
+        rect.x -= width;
     }
 }
 //can nhac ve setnewpos
@@ -30,7 +30,7 @@ void Clocktime::setNewPos()
     rect.x = x;
     if (rect.x + width > SCREEN_WIDTH)
     {
-        rect.x -= 50;
+        rect.x -= width;
     }
     rect.y = 0;
 }

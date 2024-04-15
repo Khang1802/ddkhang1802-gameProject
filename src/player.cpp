@@ -2,6 +2,7 @@
 #include <header/player.h>
 
 
+
 Player::Player()
 {
     x_val = 0; //do dich chuyen cua nhan vat
@@ -61,6 +62,7 @@ void Player::handleInputAction(SDL_Event &event)
 void Player::renderPlayer(SDL_Renderer* screen, Player &player)
 {
     player.applyTexture(screen, rect.x, rect.y);
+    
 }
 
 void Player::handleMove()

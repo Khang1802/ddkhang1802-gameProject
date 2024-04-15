@@ -15,6 +15,8 @@
 #include <header/life.h>
 #include <header/clocktime.h>
 #include <header/explosion.h>
+#include <header/shield.h>
+#include <header/effectshield.h>
 
 Object background;
 Player p_player;
@@ -45,6 +47,12 @@ Object muclucgame;
 
 //explosion
 Explosion explosion;
+
+//shield
+Shield shield;
+
+//effect shield;
+Effectshield effectshield;
 
 bool initSDL()
 {
@@ -124,6 +132,7 @@ void close()
     treasure.clean();
     life.clean();
     explosion.clean();
+    shield.clean();
 
     for (int i = 0; i < threat_Collection.size(); i++)
     {
@@ -251,9 +260,10 @@ int endMenu(Object& anhmucluc)
     return 1;
 }
 
+
 int main(int argc, char* argv[])
 {   
-    srand(time(0));   //sinh threat tai vi tri ngau nhien
+    srand(time(0));   //sinh seed ngau nhien
     
     if (initSDL() != true) 
     {
@@ -267,7 +277,10 @@ int main(int argc, char* argv[])
         std::cout << "Background failed" << IMG_GetError() << std::endl;      //goi background
     }
     //-----------------------------------------------------
-
+    if (effectshield.loadTexture("res/Shield.png", screen) != true)
+    {
+        std::cout << "load effectshield failed !" << IMG_GetError() << std::endl;
+    }
 
     //------------------------------------------------------
 
@@ -299,7 +312,10 @@ int main(int argc, char* argv[])
     }
 
     //------------------------------------------------------
-
+    if (shield.loadTexture("res/shieldicon.png", screen) != true)
+    {
+        std::cout << "load shield failed !" << IMG_GetError() << std:: endl;
+    }
     
     //------------------------------------------------------
     //load music
@@ -344,6 +360,8 @@ int main(int argc, char* argv[])
     //-----------------------------------------------------
     int menugame = showMenu(menu); //show menu 1 lan duy nhat
 
+
+
 while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de restart game
 {    
 
@@ -356,7 +374,14 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
     bool is_quit = false;
 
     int count_treasure = 0;
-    
+
+    //---------------
+    int shield_pos = rand()%1230+1;
+    shield.setShieldpos(shield_pos);
+    bool is_shield = false;
+    int temp_shield = 0;
+    //----------------
+
     int treasure_xval = rand()%1230+1;
     treasure.setInitialPos(treasure_xval);
 
@@ -372,14 +397,15 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
    bool stop_threat = false;
    
    bool clock_exist = false;
+   int tgngungdong = 0; //co the dung chung cho clocktime va shield
 
-   int tgngungdong = 0;
-   
-   int index_threat = 90;
+   int index_threat = 100; //respawn threat
 
    bool gamequit = true;
 
    int temp_treasure = 0;
+
+    bool shield_effect = false;
 
    //int endgame = 0;
 
@@ -424,25 +450,25 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             {
                 xchange += 0.005;     //tang toc do cho threat
             }
-
+            //-----------------------------
             
-
+            //-----------------------------
             if (time_count % index_threat == 0)     //lam moi threat (can nhac ve do kho cho game)
             {
                 if (stop_threat == false)
                 {
-                     int num_threat = rand()&1230+1;
-                
-                     while (num_threat >= SCREEN_WIDTH - 50)  //khong de threat tran ra man hinh
+                     int num_threat = rand()%1230 + 1;
+                     
+                     while (num_threat >= SCREEN_WIDTH - 50)  
                      {
                          num_threat = rand()%1230 + 1;
                      }
-                
+                    
                      threat_Collection.push_back(num_threat);
                 }
             }
-           
-
+            
+            
 
             SDL_RenderClear(screen);        //xoa -> nap -> in anh
             //render background
@@ -458,6 +484,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 Mix_PlayChannel(-1, hittreasure, 0);
                 count_treasure += 5;
                 temp_treasure += 5;
+                temp_shield += 5;
             }
             
             //render threat
@@ -478,12 +505,22 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             {
                 clock_exist = true;
                 temp_treasure = 0;
-                
             }
-            
+
             if (clock_exist)
             {
                 clocktime.createClock(screen, clocktime);
+            }
+            //shield function
+            if (temp_shield == 100 && is_shield == false)
+            {
+                is_shield = true;
+                temp_shield = 0;
+            }
+
+            if (is_shield)
+            {
+                shield.creatShield(screen, shield);
             }
             
             SDL_Delay(10);
@@ -496,29 +533,38 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             {
                 if (checkCollision(threat_Collection[i].getRect(), p_player.getRect()))
                 {
-                    //sau khi bi trung threat=> clear het threat
-                    if (life_count == 2)
+                    if (shield_effect == false)
                     {
-                        is_quit = true;
-                    }
-                    threat_Collection.clear();   //reset cac threat;
-                    treasure.setPos();
-                    clocktime.setNewPos();
-                    life_count++;
-                    life.decreaseLife();
-                    Mix_PlayChannel(-1, hitbom, 0);
-                    for (int ex = 0; ex < 5; ex++)
-                    {
-                        int expos_x = p_player.getRect().x + (p_player.getRect().w)/2 - 95; //dua vu no ve sat voi player
-                        int expos_y = p_player.getRect().y + (p_player.getRect().h)/2 - 95;
+                        //sau khi bi trung threat=> clear het threat
+                        if (life_count == 2)
+                        {
+                             is_quit = true;
+                        }
+                         threat_Collection.clear();   //reset cac threat;
+                         treasure.setPos();
+                         clocktime.setNewPos();
+                         shield.newShield();
+                         life_count++;
+                         life.decreaseLife();
+                         Mix_PlayChannel(-1, hitbom, 0);
+                         for (int ex = 0; ex < 5; ex++)
+                         {
+                             int expos_x = p_player.getRect().x + (p_player.getRect().w)/2 - 95; //dua vu no ve sat voi player
+                             int expos_y = p_player.getRect().y + (p_player.getRect().h)/2 - 95;
 
-                        explosion.setframe(ex);
-                        explosion.setRect(expos_x, expos_y);
-                        explosion.showexplosion(screen, explosion);
-                        SDL_Delay(100);
+                              explosion.setframe(ex);
+                              explosion.setRect(expos_x, expos_y);
+                              explosion.showexplosion(screen, explosion);
+                              SDL_Delay(100);
+                              SDL_RenderPresent(screen);
+                         }
+                    }
+                    else  //neu dang co shield
+                    {
+                        threat_Collection.erase(threat_Collection.begin()+i, threat_Collection.begin()+i+1);
+                        shield_effect = false;
                         SDL_RenderPresent(screen);
                     }
-                    
 
                 }
             }
@@ -551,7 +597,25 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 clocktime.setNewPos();
                 
                 clock_exist = false;
-                
+            }
+
+            if (checkCollision(shield.getRect(), p_player.getRect()))
+            {
+                Mix_PlayChannel(-1, clocksound, 0);
+                shield.newShield();
+                shield_effect = true;
+                is_shield = false;
+            }
+        
+            if (shield_effect)
+            {
+                effectshield.creatEffect(screen, effectshield, p_player);
+            }
+
+            if (shield.getRect().y >= 718)
+            {
+                shield.newShield();
+                is_shield = false;
             }
             
             SDL_RenderPresent(screen);
@@ -566,13 +630,14 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                     if (event.type == SDL_QUIT || endgame == 0)
                     {
                         is_quit = true;
-                        std::cout << "Da thoat hoac da restart thanh cong" << std::endl;
+                        //std::cout << "Da thoat hoac da restart thanh cong" << std::endl;
                         break;
                     } 
                     if (endgame == 1) //exit da ok
                     {
-                        std::cout << "Da exit thanh cong" << std::endl;
+                        //std::cout << "Da exit thanh cong" << std::endl;
                         close();
+                        
                     
                     }
                 SDL_RenderPresent(screen);
@@ -580,7 +645,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 }
 
                
-            }
+            }     
 
     }
     close();
