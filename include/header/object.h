@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 #include <iostream>   //de dung std::string
-
 #include <header/sources.h>
 
 class Object

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* screen = NULL;      //SDL_Renderer thay cho SDL_Surface
@@ -24,7 +25,7 @@ const int SCREEN_HEIGHT = 718;
 const int RENDER_DRAWW_COLOR = 255;   // 255, 255, 255 == white
 
 static Mix_Chunk* hittreasure = NULL;
-static Mix_Chunk* clocksound = NULL;
+static Mix_Chunk* museff = NULL;
 static Mix_Chunk* hitbom = NULL;
 static Mix_Chunk* clickchuot = NULL;
 
@@ -32,5 +33,14 @@ static Mix_Chunk* clickchuot = NULL;
 static Mix_Music* musicgame = NULL;
 static Mix_Music* menu_music = NULL;
 
+static int diemcao = 0;
 
 bool checkCollision(SDL_Rect a, SDL_Rect b);
+
+
+
+
+
+
+
+
