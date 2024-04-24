@@ -269,7 +269,10 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             std::cout << xchange << "   ";
             if (time_count % 1000 == 0 && time_count > 0) 
             {
-                    xchange += 0.65;     //tang toc do cho threat
+                    if (xchange <= 10)
+                    {
+                        xchange += 0.65;     //tang toc do cho threat
+                    }
                 
             }
             std::cout << index_threat << "   ";
@@ -289,12 +292,12 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 if (stop_threat == false)
                 {
                      int num_threat = rand()%1230 + 1;
-                    
+                     /*
                      while (num_threat >= SCREEN_WIDTH - 50)  
                      {
                          num_threat = rand()%1230 + 1;
                      }
-                    
+                     */
                      threat_Collection.push_back(num_threat);
                 }
             }
