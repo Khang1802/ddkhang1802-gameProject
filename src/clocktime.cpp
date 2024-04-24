@@ -28,7 +28,7 @@ void Clocktime::setNewPos()
 {
     int x = rand() % 1230 + 1;
     rect.x = x;
-    if (rect.x + width > SCREEN_WIDTH)
+    if (rect.x + width >= SCREEN_WIDTH)
     {
         rect.x -= width;
     }

@@ -69,7 +69,7 @@ void Player::handleMove()
 {
     rect.x += x_val;
     //can chinh sua
-    if (rect.x < 0 || rect.x + width > SCREEN_WIDTH)
+    if (rect.x < 0 || rect.x + width >= SCREEN_WIDTH)
         rect.x -= x_val;
 }
 

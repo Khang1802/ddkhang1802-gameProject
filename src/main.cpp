@@ -36,6 +36,8 @@ Life life;
 
 //Font
 Object Score;
+//highscore;
+Object kiluc;
 
 //Time
 Object Time;
@@ -66,17 +68,7 @@ int showMenu(Object& anhmenu);
 int endMenu(Object& anhmucluc);
     
 
-int getHighscore()
-{
-    std::ifstream fileopen("highscore.txt");
-    fileopen >> diemcao;
-    std::cout << "da mo file" << std::endl;
-    std::cout << diemcao << std::endl;
-    fileopen.close();
-    return diemcao;
-}
-
-void recordfile(const int &highscore)
+void recordfile(int highscore)
 {
     std::ofstream outfile("highscore.txt", std::ofstream::out|std::ofstream::trunc);
     outfile << highscore;
@@ -266,18 +258,23 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 {
                     std::cout << "load time failed " << std::endl;
                 }
+
+                if (!kiluc.loadTtf("Best score : " + std::to_string(diemcao), screen, font, color_white))
+                {
+                    std::cout << "load best score failed " << std::endl;
+                }
                 
             }
 
-
+            std::cout << xchange << "   ";
             if (time_count % 1000 == 0 && time_count > 0) 
             {
-                    xchange += 0.75;     //tang toc do cho threat
+                    xchange += 0.65;     //tang toc do cho threat
                 
             }
-            std::cout << index_threat << std::endl;
+            std::cout << index_threat << "   ";
             
-            if (time_count % 1000 == 0 && time_count > 0)
+            if (time_count % 700 == 0 && time_count > 0)
             {
                 if (index_threat >= 40)
                 {
@@ -329,6 +326,8 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             p_player.renderPlayer(screen, p_player);
             //render score
             Score.applyTexture(screen, 10, 0);
+            //render ki luc
+            kiluc.applyTexture(screen, 10, 50);
             //render time
             Time.applyTexture(screen, SCREEN_WIDTH/2-60, 0);
             //render treasure
@@ -357,7 +356,6 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             }
             
             SDL_Delay(10);
-
             
             time_count += 1;         //tinh thoi gian
 
@@ -371,12 +369,12 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                         //neu trung bom thi diem tich luy de lay buff se bi reset ve 0;
                         temp_treasure = 0;
                         temp_shield = 0;
-                        if (count_treasure > diemcao)
-                        {
-                            diemcao = count_treasure;
-                            recordfile(getHighscore());
-                        }
                         //---------------------------------
+                        if (count_treasure > diemcao)
+                            {
+                                 diemcao = count_treasure;
+                                 recordfile(diemcao);
+                            }
                         if (life_count == 2)
                         {
                              is_quit = true;
@@ -589,6 +587,7 @@ void close()
     explosion.clean();
     shield.clean();
     effectshield.clean();
+    kiluc.clean();
 
     for (int i = 0; i < threat_Collection.size(); i++)
     {
@@ -716,5 +715,3 @@ int endMenu(Object& anhmucluc)
     }
     return 1;
 }
-
-

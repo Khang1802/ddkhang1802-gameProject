@@ -28,8 +28,6 @@ static Mix_Chunk* hittreasure = NULL;
 static Mix_Chunk* museff = NULL;
 static Mix_Chunk* hitbom = NULL;
 static Mix_Chunk* clickchuot = NULL;
-
-
 static Mix_Music* musicgame = NULL;
 static Mix_Music* menu_music = NULL;
 

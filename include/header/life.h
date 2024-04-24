@@ -13,7 +13,9 @@ class Life : public Object
         void createLife(SDL_Renderer* screen, Life& life);
         void initLife(SDL_Renderer* screen, Life& life);
 
+
         void decreaseLife();
+        
 
     private:
         int number_life;

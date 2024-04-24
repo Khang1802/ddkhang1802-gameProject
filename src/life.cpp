@@ -46,3 +46,4 @@ void Life::decreaseLife()
     number_life--;
     life_list.pop_back();  //loai bo di xpos tai vi tri cuoi cung
 }
+
