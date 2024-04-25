@@ -30,15 +30,11 @@ static Mix_Chunk* hitbom = NULL;
 static Mix_Chunk* clickchuot = NULL;
 static Mix_Music* musicgame = NULL;
 static Mix_Music* menu_music = NULL;
+static Mix_Music* huongdanmus = NULL;
 
 static int diemcao = 0;
 
 bool checkCollision(SDL_Rect a, SDL_Rect b);
-
-
-
-
-
 
 
 

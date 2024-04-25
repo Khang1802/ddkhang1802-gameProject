@@ -22,6 +22,6 @@ public:
 
 private:
   
-   int x_val;          //vi tri ban dau
+   int x_val;
    SDL_Rect rect;
 };

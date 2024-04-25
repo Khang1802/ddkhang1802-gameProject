@@ -25,7 +25,7 @@
 Object background;
 Player p_player;
 
-int x_threat = rand()%1230 + 1;
+int x_threat = rand()%(1230-50);
 Threat t_threat(x_threat);
 
 std::vector<Threat> threat_Collection;
@@ -51,6 +51,9 @@ Object menu;
 //endgame
 Object muclucgame;
 
+//instruction;
+Object huongdan;
+
 //explosion
 Explosion explosion;
 
@@ -62,10 +65,11 @@ Effectshield effectshield;
 
 //prototype
 bool initSDL();
-bool loadBackground();   
+bool loadMedia();   
 void close();
 int showMenu(Object& anhmenu);
 int endMenu(Object& anhmucluc);
+int showHuongdan(Object &anhhuongdan);
     
 
 void recordfile(int highscore)
@@ -77,104 +81,22 @@ void recordfile(int highscore)
 
 int main(int argc, char* argv[])
 {   
+    const int FPS = 60;
+    const int frameDelay = 1000/FPS;
+    Uint32 frameStart;
+    int frameTime;
+
     srand(time(0));   //sinh seed ngau nhien
     
-    if (initSDL() != true) 
+    if (!loadMedia())
     {
-        std::cout << "Initilize failed" << std::endl;           //khoi tao cua so 
-    }    
-
-    //------------------------------------------------------
-
-    if (loadBackground() != true) 
-    {
-        std::cout << "Background failed" << IMG_GetError() << std::endl;      //goi background
+        std::cout << "load media failed " << std::endl;
     }
-    //-----------------------------------------------------
-    if (effectshield.loadTexture("res/Shield.png", screen) != true)
-    {
-        std::cout << "load effectshield failed !" << IMG_GetError() << std::endl;
-    }
-
-    //------------------------------------------------------
-
-    if (p_player.loadTexture("res/newsizeknight.png", screen) != true)
-    {
-        std::cout << "Load player failed!" << IMG_GetError() << std::endl;
-    }
-
-    //------------------------------------------------------
-
-    
-    if (t_threat.loadTexture("res/bomb.png", screen) != true)
-    {
-        std::cout << "Load threat failed!" << IMG_GetError() << std::endl;
-    }
-
-    //------------------------------------------------------
-
-    if (treasure.loadTexture("res/treasure.png", screen) != true)
-    {
-        std::cout << "load treasure failed !" << IMG_GetError() << std::endl;
-    }
-
-    //------------------------------------------------------
-    
-    if (clocktime.loadTexture("res/timeclock.png", screen) != true)
-    {
-        std::cout << "load clock failed !" << IMG_GetError() << std::endl;
-    }
-
-    //------------------------------------------------------
-    if (shield.loadTexture("res/shieldicon.png", screen) != true)
-    {
-        std::cout << "load shield failed !" << IMG_GetError() << std:: endl;
-    }
-    
-    //------------------------------------------------------
-    //load music
-    musicgame = Mix_LoadMUS("res/MysticalForest1.wav");
-    if (musicgame == NULL)
-    {
-        std::cout << "musicgame failed !" << Mix_GetError() << std::endl;
-    }
-    menu_music = Mix_LoadMUS("res/cybercity.wav");
-    if (menu_music == NULL)
-    {
-        std::cout << "musicmenu failed !" << Mix_GetError() << std::endl;
-
-    }
-    hittreasure = Mix_LoadWAV("res/hitcoin.wav");
-    if (hittreasure == NULL)
-    {
-        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
-    }
-    museff = Mix_LoadWAV("res/hitclock.wav");
-    if (museff == NULL)
-    {
-        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
-    }
-    hitbom = Mix_LoadWAV("res/hitbom.wav");
-    if (hitbom == NULL)
-    {
-        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
-    }
-    clickchuot = Mix_LoadWAV("res/clickchuot.wav");
-    if (clickchuot == NULL)
-    {
-        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
-    }
-    //-----------------------------------------------------
-    //load vu no
-    if (explosion.loadTexture("res/explimage.png", screen) != true)
-    {
-        std::cout << "load explosion failed !" << IMG_GetError() << std::endl;
-    }
-    explosion.setclip();
     //-----------------------------------------------------
 
     //----------------------------------------------------
     int menugame = showMenu(menu); //show menu 1 lan duy nhat
+    int huongdangame = showHuongdan(huongdan);
 
 while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de restart game
 {    
@@ -291,7 +213,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
             {
                 if (stop_threat == false)
                 {
-                     int num_threat = rand()%1230 + 1;
+                     int num_threat = rand()%(1230-50);
                      /*
                      while (num_threat >= SCREEN_WIDTH - 50)  
                      {
@@ -301,7 +223,9 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                      threat_Collection.push_back(num_threat);
                 }
             }
-            
+            ///////////////////////////
+            frameStart = SDL_GetTicks();
+            ///////////////////////////
 
             SDL_RenderClear(screen);        //xoa -> nap -> in anh
             //render background
@@ -358,7 +282,12 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 shield.creatShield(screen, shield);
             }
             
-            SDL_Delay(10);
+            //SDL_Delay(10);
+            frameTime = SDL_GetTicks() - frameStart;
+            if (frameDelay > frameTime)
+            {
+                SDL_Delay(frameDelay - frameTime);
+            }
             
             time_count += 1;         //tinh thoi gian
 
@@ -474,7 +403,12 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 shield.newShield();
                 is_shield = false;
             }
-            
+            /*
+            if (count_treasure == 50)
+            {
+                life.increaseLife();
+            }
+            */ 
             SDL_RenderPresent(screen);
             std::cout << xchange << "   ";
         }
@@ -564,12 +498,121 @@ bool initSDL()
     return flag;
 }
 
-bool loadBackground()        
+bool loadMedia()        
 {
+    if (initSDL() != true) 
+    {
+        std::cout << "Initilize failed" << std::endl;           //khoi tao cua so 
+        return false;
+    }    
+
+    //------------------------------------------------------
+
     if (!background.loadTexture("res/background.png", screen))
     {
+        std::cout << "load background failed" << std::endl;
         return false;
     }
+    //-----------------------------------------------------
+    if (effectshield.loadTexture("res/Shield.png", screen) != true)
+    {
+        std::cout << "load effectshield failed !" << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    //------------------------------------------------------
+
+    if (p_player.loadTexture("res/newsizeknight.png", screen) != true)
+    {
+        std::cout << "Load player failed!" << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    //------------------------------------------------------
+
+    
+    if (t_threat.loadTexture("res/bomb.png", screen) != true)
+    {
+        std::cout << "Load threat failed!" << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    //------------------------------------------------------
+
+    if (treasure.loadTexture("res/treasure.png", screen) != true)
+    {
+        std::cout << "load treasure failed !" << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    //------------------------------------------------------
+    
+    if (clocktime.loadTexture("res/timeclock.png", screen) != true)
+    {
+        std::cout << "load clock failed !" << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    //------------------------------------------------------
+    if (shield.loadTexture("res/shieldicon.png", screen) != true)
+    {
+        std::cout << "load shield failed !" << IMG_GetError() << std:: endl;
+        return false;
+    }
+    
+    //------------------------------------------------------
+    //load music
+    musicgame = Mix_LoadMUS("res/MysticalForest1.wav");
+    if (musicgame == NULL)
+    {
+        std::cout << "musicgame failed !" << Mix_GetError() << std::endl;
+        return false;
+    }
+    menu_music = Mix_LoadMUS("res/cybercity.wav");
+    if (menu_music == NULL)
+    {
+        std::cout << "musicmenu failed !" << Mix_GetError() << std::endl;
+        return false;
+
+    }
+    hittreasure = Mix_LoadWAV("res/hitcoin.wav");
+    if (hittreasure == NULL)
+    {
+        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
+        return false;
+    }
+    museff = Mix_LoadWAV("res/hitclock.wav");
+    if (museff == NULL)
+    {
+        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
+        return false;
+    }
+    hitbom = Mix_LoadWAV("res/hitbom.wav");
+    if (hitbom == NULL)
+    {
+        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
+        return false;
+    }
+    clickchuot = Mix_LoadWAV("res/clickchuot.wav");
+    if (clickchuot == NULL)
+    {
+        std::cout << "sound effect failed !" << Mix_GetError() << std::endl;
+        return false;
+    }
+    huongdanmus = Mix_LoadMUS("res/nhachay.wav");
+    if (huongdanmus == NULL)
+    {
+        std::cout << "tieng sao failed !" << Mix_GetError() << std::endl;
+        return false;
+    }
+    //-----------------------------------------------------
+    //load vu no
+    if (explosion.loadTexture("res/explimage.png", screen) != true)
+    {
+        std::cout << "load explosion failed !" << IMG_GetError() << std::endl;
+        return false;
+    }
+    explosion.setclip();
     return true;
 }
 
@@ -591,6 +634,7 @@ void close()
     shield.clean();
     effectshield.clean();
     kiluc.clean();
+    huongdan.clean();
 
     for (int i = 0; i < threat_Collection.size(); i++)
     {
@@ -601,6 +645,7 @@ void close()
 
     Mix_FreeMusic(menu_music);
     Mix_FreeMusic(musicgame);
+    Mix_FreeMusic(huongdanmus);
 
     Mix_FreeChunk(clickchuot);
     Mix_FreeChunk(hitbom);
@@ -619,6 +664,7 @@ void close()
     Mix_Quit();
     SDL_Quit();
 }
+
 
 
 int showMenu(Object& anhmenu)
@@ -712,6 +758,38 @@ int endMenu(Object& anhmucluc)
                 default:
                     break;
 
+            }
+        }
+        SDL_RenderPresent(screen);
+    }
+    return 1;
+}
+
+int showHuongdan(Object &anhhuongdan)
+{
+    if (!anhhuongdan.loadTexture("res/anhhuongdan.png", screen))
+    {
+        std::cout << "anh huong dan load failed " << std::endl;
+    }
+    SDL_Event ins_Event;
+    while (true)
+    {
+        if (Mix_PlayingMusic() == 0)
+        {
+            Mix_PlayMusic(huongdanmus, -1);
+        }
+        anhhuongdan.applyTexture(screen, 0, 0);
+        while (SDL_PollEvent(&ins_Event))
+        {
+            switch(ins_Event.key.keysym.sym)
+            {
+                case SDLK_SPACE:
+                    Mix_PlayChannel(-1, clickchuot, 0);
+                    Mix_HaltMusic();
+                    return 0;
+                    break;
+                default:
+                    break;
             }
         }
         SDL_RenderPresent(screen);

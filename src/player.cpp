@@ -11,6 +11,7 @@ Player::Player()
     rect.y = 530;     //toa do de nhan vat tiep dat
     rect.w = width; 
     rect.h = height;
+
 }
 
 Player::~Player()
@@ -26,7 +27,7 @@ SDL_Rect Player::getRect()
 
 void Player::handleInputAction(SDL_Event &event)
 {
-    if (event.type == SDL_KEYDOWN && event.key.repeat == 0)    //luc nhan phim
+    if (event.type == SDL_KEYDOWN && event.key.repeat == 0)    //luc nhan giu phim lien tuc
     {
         switch (event.key.keysym.sym)
         {
@@ -70,7 +71,11 @@ void Player::handleMove()
     rect.x += x_val;
     //can chinh sua
     if (rect.x < 0 || rect.x + width >= SCREEN_WIDTH)
+    {
         rect.x -= x_val;
+    }
+
+    
 }
 
 void Player::setvalue_x(int x)
