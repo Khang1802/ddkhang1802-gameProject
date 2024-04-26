@@ -190,7 +190,6 @@ while (vonglap) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de re
                 
             }
 
-            std::cout << xchange << "   ";
             if (time_count % 1000 == 0 && time_count > 0) 
             {
                     if (xchange <= 11)
@@ -668,6 +667,7 @@ void close()
     hitbom = NULL;
     hittreasure = NULL;
     museff = NULL;
+    huongdanmus = NULL;
 
     TTF_Quit();  //free font
     IMG_Quit();
