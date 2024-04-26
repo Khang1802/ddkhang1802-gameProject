@@ -50,6 +50,10 @@
 
 ![background](res/background.png)
 
+- Menu kết thúc : 
+
+![endmenu](res/mucluc.png)
+
 - Nhân vật chính : 
 
 ![player](res/newsizeknight.png)
@@ -59,21 +63,31 @@
 
 ![threat](res/bomb.png)
 
+
+- Tiền :
+
+![coin](res/treasure.png)
+
+
 - Đồng hồ (buff) :
 
 ![clock](res/timeclock.png)
+
 
 - Khiên :
 
 ![shield](res/shieldicon.png)
 
+
 - Hiệu ứng khiên :
 
 ![effshield](res/Shield.png)
 
+
 - Mạng :
 
 ![life](res/heart.png)
+
 
 
 ## Kiến thức sử dụng:
