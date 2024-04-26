@@ -89,6 +89,11 @@
 ![life](res/heart.png)
 
 
+- Vụ nổ :
+
+![explo](res/explimage.png)
+
+
 
 ## Kiến thức sử dụng:
     + vector 

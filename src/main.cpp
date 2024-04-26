@@ -193,9 +193,9 @@ while (vonglap) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de re
             std::cout << xchange << "   ";
             if (time_count % 1000 == 0 && time_count > 0) 
             {
-                    if (xchange <= 10)
+                    if (xchange <= 11)
                     {
-                        xchange += 0.65;     //tang toc do cho threat
+                        xchange += 0.7;     //tang toc do cho threat
                     }
                 
             }
@@ -203,7 +203,7 @@ while (vonglap) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de re
             
             if (time_count % 700 == 0 && time_count > 0)
             {
-                if (index_threat >= 40)
+                if (index_threat >= 35)
                 {
                     index_threat -= 5;
                 }
@@ -294,6 +294,11 @@ while (vonglap) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de re
             
             time_count += 1;         //tinh thoi gian
 
+            if (count_treasure > diemcao)
+            {
+                diemcao = count_treasure;
+            }
+
             // check va cham
             for (int i = 0; i < threat_Collection.size(); i++)
             {
@@ -305,13 +310,9 @@ while (vonglap) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de re
                         temp_treasure = 0;
                         temp_shield = 0;
                         //---------------------------------
-                        if (count_treasure > diemcao)
-                            {
-                                 diemcao = count_treasure;
-                                 recordfile(diemcao);
-                            }
                         if (life_count == 2)
                         {
+                             recordfile(diemcao);       
                              is_quit = true;
                         }
                          threat_Collection.clear();   //reset cac threat;
@@ -726,13 +727,13 @@ int showMenu(Object& anhmenu)
 
 int endMenu(Object& anhmucluc)
 {
-    if (!anhmucluc.loadTexture("res/mucluc.png", screen))
+    if (!anhmucluc.loadTexture("res/endmenu.png", screen))
     {
         std::cout << "muc luc load failed!" << std::endl;
     }
     SDL_Rect mucluc_pos[2];
-    mucluc_pos[0] = {SCREEN_WIDTH-773,SCREEN_HEIGHT-541,338,84}; //restart
-    mucluc_pos[1] = {SCREEN_WIDTH-720, SCREEN_HEIGHT-324,243,81}; //exit
+    mucluc_pos[0] = {SCREEN_WIDTH-687,SCREEN_HEIGHT-365,196,68}; //restart
+    mucluc_pos[1] = {SCREEN_WIDTH-643, SCREEN_HEIGHT-223,111,70}; //exit
     int x, y;
     SDL_Event event_mucluc;
     while (true)
@@ -742,6 +743,11 @@ int endMenu(Object& anhmucluc)
             Mix_PlayMusic(menu_music, -1);
         }
         anhmucluc.applyTexture(screen, 0, 0);
+        //render ki luc
+        kiluc.applyTexture(screen, 530, 718-618);
+        //render score
+        Score.applyTexture(screen, 570, 718-488);
+        
         while (SDL_PollEvent(&event_mucluc))
         {
             switch(event_mucluc.type)

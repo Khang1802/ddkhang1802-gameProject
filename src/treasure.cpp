@@ -30,7 +30,7 @@ void Treasure::setInitialPos(int &x)
 
 void Treasure::setPos()
 {
-    int x = rand() % 1230 + 1;
+    int x = rand() % (1230-width);
     rect.x = x;
     if (rect.x + width >= SCREEN_WIDTH)
     {

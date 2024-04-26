@@ -21,7 +21,7 @@ void Shield::setShieldpos(int &x)
 
 void Shield::newShield()
 {
-    int x = rand() % 1230 + 1;
+    int x = rand() % (1230-width);
     rect.x = x;
     if (rect.x + width >= SCREEN_WIDTH)
     {
