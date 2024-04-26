@@ -16,7 +16,7 @@ class Life : public Object
 
         void decreaseLife();
         
-        //void increaseLife();
+        bool increaseLife();
 
     private:
         int number_life;

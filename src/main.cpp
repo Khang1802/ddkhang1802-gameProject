@@ -97,8 +97,9 @@ int main(int argc, char* argv[])
     //----------------------------------------------------
     int menugame = showMenu(menu); //show menu 1 lan duy nhat
     int huongdangame = showHuongdan(huongdan);
+    bool vonglap = true;
 
-while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de restart game
+while (vonglap) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de restart game
 {    
 
     p_player.setvalue_x(0);
@@ -126,6 +127,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
     clocktime.setClockPos(clock_xval);
 
    int life_count = 0;
+   int res_life = 0;
     //load font
     
     font = TTF_OpenFont("res/DungeonFont.ttf", 45);
@@ -197,7 +199,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                     }
                 
             }
-            std::cout << index_threat << "   ";
+            //std::cout << index_threat << "   ";
             
             if (time_count % 700 == 0 && time_count > 0)
             {
@@ -242,6 +244,7 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 count_treasure += 5;
                 temp_treasure += 5;
                 temp_shield += 5;
+                res_life += 5;
             }
             
             //render threat
@@ -403,14 +406,18 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                 shield.newShield();
                 is_shield = false;
             }
-            /*
-            if (count_treasure == 50)
+            
+            if (res_life == 100)
             {
-                life.increaseLife();
+                if (life.increaseLife())
+                {
+                    life_count--;
+                }
+                res_life -= 100;
             }
-            */ 
+            
             SDL_RenderPresent(screen);
-            std::cout << xchange << "   ";
+            //std::cout << xchange << "   ";
         }
             is_quit = false;
             
@@ -427,15 +434,17 @@ while (true) //vong lap phu o ngoai thiet lap cac trang thai ve ban dau de resta
                     } 
                     if (endgame == 1) //exit da ok
                     {
+                        vonglap = false;
+                        is_quit = true;
                         //std::cout << "Da exit thanh cong" << std::endl;
-                        close();
+                        //close();
+                        break;
                     }
                 SDL_RenderPresent(screen);
                 
                 }
             
-            }    
-            
+            } 
     }
     close();
     return 0;

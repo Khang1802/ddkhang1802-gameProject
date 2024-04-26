@@ -46,21 +46,22 @@ void Life::decreaseLife()
     number_life--;
     life_list.pop_back();  //loai bo di xpos tai vi tri cuoi cung
 }
-/*
-void Life::increaseLife()
+
+bool Life::increaseLife()
 {
     if (number_life < 3)
     {
-        
-        if (number_life == 1)
+        number_life++;
+        if (life_list.size() == 1)
         {
             addPos(SCREEN_WIDTH-140);
+            return true;
         }
-        else if (number_life == 2)
+        else if (life_list.size() == 2)
         {
             addPos(SCREEN_WIDTH-200);
+            return true;
         }
-        number_life++;
     }
+    return false;
 }
-*/

@@ -35,6 +35,3 @@ static Mix_Music* huongdanmus = NULL;
 static int diemcao = 0;
 
 bool checkCollision(SDL_Rect a, SDL_Rect b);
-
-
-
