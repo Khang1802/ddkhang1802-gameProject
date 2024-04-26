@@ -35,9 +35,12 @@
 - Game: Knight's adventure
 ***
 # Cách tải game:
-- Bước 1: Truy cập vào đường link google drive sau : 
-- Bước 2: Tải file .rar/.zip về máy, sau đó giải nén thành folder
-- Bước 3: Vào folder đã giải nén, bấm file "main.exe" để chạy game
+- Cách 1:
+  - Bước 1: Truy cập vào đường link google drive sau : https://drive.google.com/file/d/1AwNtParOPfFHrJsjXTB9K0VMOsjRYDBf/view?usp=sharing
+  - Bước 2: Tải file .rar/.zip về máy, sau đó giải nén thành folder
+  - Bước 3: Vào folder đã giải nén, bấm file "main.exe" để chạy game
+  
+- Cách 2: Clone my repo, sau đó vào file main.exe để chạy
 
 
 ***
