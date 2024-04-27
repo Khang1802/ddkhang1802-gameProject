@@ -36,7 +36,7 @@
 ***
 # Cách tải game:
 - Cách 1:
-  - Bước 1: Truy cập vào đường link google drive sau : https://drive.google.com/file/d/1AwNtParOPfFHrJsjXTB9K0VMOsjRYDBf/view?usp=sharing
+  - Bước 1: Truy cập vào đường link google drive sau : https://drive.google.com/file/d/1V8lBp0hAhv1JmnBVNoMTxVWlF0tKqY0_/view?usp=sharing
   - Bước 2: Tải file .rar/.zip về máy, sau đó giải nén thành folder
   - Bước 3: Vào folder đã giải nén, bấm file "main.exe" để chạy game
   
